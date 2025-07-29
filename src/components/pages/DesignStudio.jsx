@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import { designElementsService } from "@/services/api/designElementsService";
 import { orderService } from "@/services/api/orderService";
+import { designElementsService } from "@/services/api/designElementsService";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 
@@ -381,23 +381,13 @@ const categories = [
       {/* Header */}
       <div className="bg-surface border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              icon="ArrowLeft"
-              onClick={() => navigate("/")}
-            >
-              Back
-            </Button>
-            <div>
-              <h1 className="font-display font-bold text-xl text-gray-900">
-                Design Studio
-              </h1>
-              <p className="text-sm text-gray-600">
-                Create your custom design
-              </p>
-            </div>
+<div>
+            <h1 className="font-display font-bold text-xl text-gray-900">
+              Design Studio
+            </h1>
+            <p className="text-sm text-gray-600">
+              Create your custom design
+</p>
           </div>
           
           <div className="flex items-center gap-3">
