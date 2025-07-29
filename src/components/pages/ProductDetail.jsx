@@ -50,9 +50,13 @@ const ProductDetail = () => {
     // Simulate adding to cart
     toast.success(`Added ${product.name} to cart!`);
   };
-
-  const handleStartDesigning = () => {
-    navigate("/design-studio", { state: { productId: product.Id } });
+const handleStartDesigning = () => {
+    navigate("/design-studio", { 
+      state: { 
+        productId: product.Id,
+        selectedImage: selectedImage
+      } 
+    });
   };
 
   const calculatePrice = () => {

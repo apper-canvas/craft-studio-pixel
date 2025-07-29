@@ -46,9 +46,11 @@ const DesignStudio = () => {
     loadProduct();
   }, []);
 
-  const loadProduct = async () => {
+const loadProduct = async () => {
     try {
       const productId = location.state?.productId;
+      const selectedImageIndex = location.state?.selectedImage || 0;
+      
       if (!productId) {
         toast.error("No product selected for design");
         navigate("/products");
@@ -56,7 +58,7 @@ const DesignStudio = () => {
       }
 
       const productData = await productService.getById(productId);
-      setProduct(productData);
+      setProduct({ ...productData, selectedImageIndex });
     } catch (error) {
       toast.error("Failed to load product");
       console.error(error);
@@ -485,9 +487,9 @@ const DesignStudio = () => {
                 setEditingText(null);
               }}
             >
-              {/* Product Background */}
-<img
-                src={product.image}
+{/* Product Background */}
+              <img
+                src={product.images[product.selectedImageIndex] || product.images[0]}
                 alt={product.name}
                 className="absolute inset-0 w-full h-full object-cover"
                 draggable={false}
