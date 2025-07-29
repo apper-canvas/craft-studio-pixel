@@ -136,16 +136,22 @@ const loadProduct = async () => {
     }
   };
 
-  const handleTextSave = () => {
-    if (editingText && textContent.trim()) {
+const handleTextSave = () => {
+    if (editingText) {
+      const currentElement = designElements.find(el => el.id === editingText);
+      const finalContent = textContent.trim() || currentElement?.content || "Double click to edit";
+      
       setDesignElements(elements => 
         elements.map(el => 
           el.id === editingText 
-            ? { ...el, content: textContent.trim() }
+            ? { ...el, content: finalContent }
             : el
         )
       );
-      toast.success("Text updated");
+      
+      if (textContent.trim()) {
+        toast.success("Text updated");
+      }
     }
     setEditingText(null);
     setTextContent('');
@@ -355,7 +361,7 @@ const handleMouseDown = (element, event) => {
           </div>
 
           {/* Text Properties */}
-          {selectedElement && selectedElement.type === 'text' && (
+{selectedElement && selectedElement.type === 'text' && (
             <div className="p-4 border-b border-gray-200">
               <h3 className="font-semibold text-gray-900 mb-3">Text Properties</h3>
               
@@ -544,10 +550,16 @@ const handleMouseDown = (element, event) => {
                     >
                       {editingText === element.id ? (
                         <input
-                          type="text"
-                          value={textContent}
+type="text"
+                          value={textContent || element.content}
                           onChange={(e) => setTextContent(e.target.value)}
-                          onBlur={handleTextSave}
+                          onBlur={(e) => {
+                            // Only save if we're actually losing focus to something outside the text controls
+                            const relatedTarget = e.relatedTarget;
+                            if (!relatedTarget || !relatedTarget.closest('.text-controls')) {
+                              handleTextSave();
+                            }
+                          }}
                           onKeyPress={(e) => e.key === 'Enter' && handleTextSave()}
                           className="bg-transparent border-none outline-none"
                           style={{
