@@ -151,33 +151,58 @@ const loadProduct = async () => {
     setTextContent('');
   };
 
-  const handleMouseDown = (element, event) => {
+const handleMouseDown = (element, event) => {
     if (editingText) return;
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const rect = canvasRef.current.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left - element.x;
+    const offsetY = event.clientY - rect.top - element.y;
     
     setIsDragging(true);
     setSelectedElement(element);
     setDragStart({
-      x: event.clientX - element.x,
-      y: event.clientY - element.y
+      x: offsetX,
+      y: offsetY
     });
+
+    // Attach mouse events to document for proper drag tracking
+    const handleDocumentMouseMove = (e) => {
+      if (!canvasRef.current) return;
+      
+      const canvasRect = canvasRef.current.getBoundingClientRect();
+      const newX = e.clientX - canvasRect.left - offsetX;
+      const newY = e.clientY - canvasRect.top - offsetY;
+      
+      // Constrain to canvas bounds
+      const constrainedX = Math.max(0, Math.min(newX, 600 - (element.width || 100)));
+      const constrainedY = Math.max(0, Math.min(newY, 600 - (element.height || 30)));
+
+      setDesignElements(elements =>
+        elements.map(el =>
+          el.id === element.id
+            ? { ...el, x: constrainedX, y: constrainedY }
+            : el
+        )
+      );
+
+      setSelectedElement(prev => ({ ...prev, x: constrainedX, y: constrainedY }));
+    };
+
+    const handleDocumentMouseUp = () => {
+      setIsDragging(false);
+      document.removeEventListener('mousemove', handleDocumentMouseMove);
+      document.removeEventListener('mouseup', handleDocumentMouseUp);
+    };
+
+    document.addEventListener('mousemove', handleDocumentMouseMove);
+    document.addEventListener('mouseup', handleDocumentMouseUp);
   };
 
   const handleMouseMove = (event) => {
-    if (!isDragging || !selectedElement) return;
-
-    const rect = canvasRef.current.getBoundingClientRect();
-    const newX = event.clientX - rect.left - dragStart.x;
-    const newY = event.clientY - rect.top - dragStart.y;
-
-    setDesignElements(elements =>
-      elements.map(el =>
-        el.id === selectedElement.id
-          ? { ...el, x: Math.max(0, newX), y: Math.max(0, newY) }
-          : el
-      )
-    );
-
-    setSelectedElement(prev => ({ ...prev, x: Math.max(0, newX), y: Math.max(0, newY) }));
+    // This function is now handled by document event listeners during drag
+    // Keep for compatibility but the actual dragging is handled in handleMouseDown
   };
 
   const handleMouseUp = () => {
