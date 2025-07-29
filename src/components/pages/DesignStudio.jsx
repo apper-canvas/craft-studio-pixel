@@ -11,7 +11,8 @@ const DesignStudio = () => {
   const navigate = useNavigate();
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
-
+// Image editing state
+  const [aspectRatioLocked, setAspectRatioLocked] = useState(true);
   // Product and design state
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,8 +21,7 @@ const DesignStudio = () => {
   const [activeTool, setActiveTool] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-
-  // Text editing state
+// Text editing state
   const [editingText, setEditingText] = useState(null);
   const [textContent, setTextContent] = useState('');
   const [fontFamily, setFontFamily] = useState('Inter');
@@ -116,8 +116,9 @@ const loadProduct = async () => {
 
   const handleElementClick = (element, event) => {
     event.stopPropagation();
-    setSelectedElement(element);
+setSelectedElement(element);
     
+    // Set properties based on element type
     if (element.type === 'text') {
       setFontFamily(element.fontFamily);
       setFontSize(element.fontSize);
@@ -193,9 +194,11 @@ const handleMouseDown = (element, event) => {
       const newX = e.clientX - canvasRect.left - offsetX;
       const newY = e.clientY - canvasRect.top - offsetY;
       
-      // Constrain to canvas bounds
-      const constrainedX = Math.max(0, Math.min(newX, 600 - (element.width || 100)));
-      const constrainedY = Math.max(0, Math.min(newY, 600 - (element.height || 30)));
+      // Constrain to canvas bounds using dynamic element dimensions
+      const elementWidth = element.width || (element.type === 'text' ? 100 : 200);
+      const elementHeight = element.height || (element.type === 'text' ? 30 : 200);
+      const constrainedX = Math.max(0, Math.min(newX, 600 - elementWidth));
+      const constrainedY = Math.max(0, Math.min(newY, 600 - elementHeight));
 
       setDesignElements(elements =>
         elements.map(el =>
@@ -246,6 +249,44 @@ const handleMouseDown = (element, event) => {
       else if (property === 'bold') setIsBold(value);
       else if (property === 'italic') setIsItalic(value);
       else if (property === 'underline') setIsUnderline(value);
+    }
+  };
+
+  const applyImageStyle = (property, value) => {
+    if (selectedElement && selectedElement.type === 'image') {
+      let updatedElement = { ...selectedElement };
+      
+      if (property === 'width') {
+        updatedElement.width = value;
+        // Maintain aspect ratio if locked
+        if (aspectRatioLocked && selectedElement.height && selectedElement.width) {
+          const aspectRatio = selectedElement.width / selectedElement.height;
+          updatedElement.height = Math.round(value / aspectRatio);
+        }
+      } else if (property === 'height') {
+        updatedElement.height = value;
+        // Maintain aspect ratio if locked
+        if (aspectRatioLocked && selectedElement.height && selectedElement.width) {
+          const aspectRatio = selectedElement.width / selectedElement.height;
+          updatedElement.width = Math.round(value * aspectRatio);
+        }
+      }
+      
+      // Ensure image stays within canvas bounds
+      if (updatedElement.x + updatedElement.width > 600) {
+        updatedElement.x = 600 - updatedElement.width;
+      }
+      if (updatedElement.y + updatedElement.height > 600) {
+        updatedElement.y = 600 - updatedElement.height;
+      }
+      
+      setDesignElements(elements =>
+        elements.map(el =>
+          el.id === selectedElement.id ? updatedElement : el
+        )
+      );
+      
+      setSelectedElement(updatedElement);
     }
   };
 
@@ -458,6 +499,74 @@ const handleMouseDown = (element, event) => {
                 </div>
               </div>
             </div>
+)}
+
+          {/* Image Properties */}
+          {selectedElement && selectedElement.type === 'image' && (
+            <div className="p-4 border-b border-gray-200">
+              <h3 className="font-semibold text-gray-900 mb-3">Image Properties</h3>
+              
+              {/* Aspect Ratio Lock */}
+              <div className="mb-3">
+                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={aspectRatioLocked}
+                    onChange={(e) => setAspectRatioLocked(e.target.checked)}
+                    className="rounded border-gray-300 text-primary-500 focus:ring-primary-500"
+                  />
+                  Lock Aspect Ratio
+                </label>
+              </div>
+
+              {/* Width */}
+              <div className="mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Width
+                </label>
+                <input
+                  type="range"
+                  min="50"
+                  max="500"
+                  value={selectedElement.width || 200}
+                  onChange={(e) => applyImageStyle('width', parseInt(e.target.value))}
+                  className="w-full"
+                />
+                <div className="text-sm text-gray-600 text-center">{selectedElement.width || 200}px</div>
+              </div>
+
+              {/* Height */}
+              <div className="mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Height
+                </label>
+                <input
+                  type="range"
+                  min="50"
+                  max="500"
+                  value={selectedElement.height || 200}
+                  onChange={(e) => applyImageStyle('height', parseInt(e.target.value))}
+                  className="w-full"
+                />
+                <div className="text-sm text-gray-600 text-center">{selectedElement.height || 200}px</div>
+              </div>
+
+              {/* Reset Size Button */}
+              <div className="mb-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    applyImageStyle('width', 200);
+                    applyImageStyle('height', 200);
+                  }}
+                  className="w-full"
+                >
+                  <ApperIcon name="RotateCcw" size={16} />
+                  Reset Size
+                </Button>
+              </div>
+            </div>
           )}
 
           {/* Layers Panel */}
@@ -590,7 +699,7 @@ const handleMouseDown = (element, event) => {
                       )}
                     </div>
                   ) : (
-                    <img
+<img
                       src={element.src}
                       alt="Design element"
                       className={`absolute cursor-move ${
