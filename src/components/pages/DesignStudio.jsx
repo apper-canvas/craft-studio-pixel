@@ -761,7 +761,8 @@ const categories = [
                       className={`absolute cursor-move select-none ${
                         selectedElement?.id === element.id ? 'ring-2 ring-primary-500' : ''
                       }`}
-                      style={{
+style={{
+                        position: 'absolute',
                         left: element.x,
                         top: element.y,
                         fontFamily: element.fontFamily,
@@ -811,7 +812,8 @@ const categories = [
                       className={`absolute cursor-move ${
                         selectedElement?.id === element.id ? 'ring-2 ring-primary-500' : ''
                       }`}
-                      style={{
+style={{
+                        position: 'absolute',
                         left: element.x,
                         top: element.y,
                         width: element.width,
