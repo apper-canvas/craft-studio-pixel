@@ -139,7 +139,20 @@ const handleElementDoubleClick = (element, event) => {
 const handleTextSave = () => {
     if (editingText) {
       const currentElement = designElements.find(el => el.id === editingText);
-      const finalContent = textContent.trim() || currentElement?.content || "Double click to edit";
+      let finalContent;
+      
+      // If user has entered text, use it
+      if (textContent.trim()) {
+        finalContent = textContent.trim();
+      } 
+      // If element has existing meaningful content (not placeholder), preserve it
+      else if (currentElement?.content && currentElement.content !== "Double click to edit") {
+        finalContent = currentElement.content;
+      }
+      // Only use placeholder for truly empty elements
+      else {
+        finalContent = "Double click to edit";
+      }
       
       setDesignElements(elements => 
         elements.map(el => 
@@ -156,7 +169,6 @@ const handleTextSave = () => {
     setEditingText(null);
     setTextContent('');
   };
-
 const handleMouseDown = (element, event) => {
     if (editingText) return;
     event.preventDefault();
@@ -549,9 +561,9 @@ const handleMouseDown = (element, event) => {
                       onMouseDown={(e) => handleMouseDown(element, e)}
                     >
 {editingText === element.id ? (
-                        <input
+<input
                           type="text"
-                          value={textContent}
+                          value={textContent || (element.content !== "Double click to edit" ? element.content : "")}
                           onChange={(e) => setTextContent(e.target.value)}
                           onBlur={(e) => {
                             // Small delay to ensure any click events are processed first
