@@ -1,0 +1,51 @@
+[
+  {
+    "Id": 1,
+    "name": "T-Shirts",
+    "icon": "Shirt",
+    "productCount": 2,
+    "description": "Custom printed apparel including t-shirts, hoodies, and sweatshirts"
+  },
+  {
+    "Id": 2,
+    "name": "Mugs",
+    "icon": "Coffee",
+    "productCount": 2,
+    "description": "Custom printed mugs, travel cups, and drinkware"
+  },
+  {
+    "Id": 3,
+    "name": "Boxes",
+    "icon": "Package",
+    "productCount": 2,
+    "description": "Custom packaging boxes for shipping, gifts, and retail"
+  },
+  {
+    "Id": 4,
+    "name": "MDF Cut-outs",
+    "icon": "Layers",
+    "productCount": 2,
+    "description": "Custom laser-cut MDF shapes, signs, and craft items"
+  },
+  {
+    "Id": 5,
+    "name": "Stickers",
+    "icon": "Star",
+    "productCount": 1,
+    "description": "Custom vinyl stickers, decals, and labels"
+  },
+  {
+    "Id": 6,
+    "name": "Business Cards",
+    "icon": "CreditCard",
+    "productCount": 1,
+    "description": "Professional business cards and networking materials"
+  },
+  {
+    "Id": 7,
+    "name": "Signage",
+    "icon": "Square",
+    "productCount": 2,
+    "description": "Custom signs, banners, and display materials"
+  }
+]

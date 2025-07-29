@@ -1,0 +1,218 @@
+[
+  {
+    "Id": 1,
+    "name": "Premium Cotton T-Shirt",
+    "category": "T-Shirts",
+    "basePrice": 24.99,
+    "description": "Soft, premium cotton t-shirt perfect for custom designs. Available in multiple colors and sizes.",
+    "images": [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1503341504253-dff4815485f1?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "100% Cotton",
+      "sizes": ["Small", "Medium", "Large", "XL", "XXL"],
+      "colors": ["White", "Black", "Navy", "Gray", "Red"],
+      "printArea": "12\" x 16\""
+    }
+  },
+  {
+    "Id": 2,
+    "name": "Ceramic Coffee Mug",
+    "category": "Mugs",
+    "basePrice": 18.99,
+    "description": "High-quality ceramic mug with smooth finish, perfect for photos, logos, and custom artwork.",
+    "images": [
+      "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1506619216599-9d16d0903dfd?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "Ceramic",
+      "capacity": "11 oz",
+      "colors": ["White", "Black", "Blue"],
+      "printArea": "3.5\" x 8.5\" wrap around"
+    }
+  },
+  {
+    "Id": 3,
+    "name": "Custom Cardboard Box",
+    "category": "Boxes",
+    "basePrice": 12.99,
+    "description": "Sturdy corrugated cardboard box ideal for shipping and packaging with custom branding.",
+    "images": [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1586880244406-556ebe35f282?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "Corrugated Cardboard",
+      "sizes": ["Small (6x6x4)", "Medium (12x9x6)", "Large (18x12x8)"],
+      "colors": ["Brown", "White"],
+      "printType": "Full color printing"
+    }
+  },
+  {
+    "Id": 4,
+    "name": "MDF Wood Cut-out",
+    "category": "MDF Cut-outs",
+    "basePrice": 35.99,
+    "description": "Precision-cut MDF wood shapes perfect for crafts, signage, and decorative projects.",
+    "images": [
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1609205807107-fddaeba29684?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "MDF (Medium Density Fiberboard)",
+      "thickness": "3mm, 6mm, 12mm",
+      "maxSize": "24\" x 36\"",
+      "finish": "Raw, Painted, Engraved"
+    }
+  },
+  {
+    "Id": 5,
+    "name": "Vinyl Sticker Pack",
+    "category": "Stickers",
+    "basePrice": 8.99,
+    "description": "Durable vinyl stickers with strong adhesive, perfect for indoor and outdoor use.",
+    "images": [
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1609205807107-fddaeba29684?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "Weatherproof Vinyl",
+      "sizes": ["2x2", "3x3", "4x4", "6x6"],
+      "finish": "Glossy, Matte",
+      "quantity": "10, 25, 50, 100 pack"
+    }
+  },
+  {
+    "Id": 6,
+    "name": "Business Card Set",
+    "category": "Business Cards",
+    "basePrice": 29.99,
+    "description": "Professional business cards on premium cardstock with various finish options.",
+    "images": [
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "350gsm Cardstock",
+      "size": "3.5\" x 2\"",
+      "finish": ["Matte", "Glossy", "Uncoated"],
+      "quantity": ["100", "250", "500", "1000"]
+    }
+  },
+  {
+    "Id": 7,
+    "name": "Acrylic Signage",
+    "category": "Signage",
+    "basePrice": 89.99,
+    "description": "Clear acrylic sign perfect for business displays, office doors, and professional signage.",
+    "images": [
+      "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1555421689-d68471e189f2?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "3mm Clear Acrylic",
+      "sizes": ["6x8", "8x10", "12x16", "18x24"],
+      "mounting": "Wall mount, Standoff, Desktop stand",
+      "printing": "UV Direct Print, Vinyl Application"
+    }
+  },
+  {
+    "Id": 8,
+    "name": "Hooded Sweatshirt",
+    "category": "T-Shirts",
+    "basePrice": 39.99,
+    "description": "Comfortable cotton blend hoodie with kangaroo pocket, perfect for custom designs and logos.",
+    "images": [
+      "https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "80% Cotton, 20% Polyester",
+      "sizes": ["Small", "Medium", "Large", "XL", "XXL"],
+      "colors": ["Gray", "Black", "Navy", "Burgundy", "Forest Green"],
+      "printArea": "12\" x 16\" front, 10\" x 12\" back"
+    }
+  },
+  {
+    "Id": 9,
+    "name": "Insulated Travel Mug",
+    "category": "Mugs",
+    "basePrice": 34.99,
+    "description": "Double-wall insulated stainless steel travel mug with leak-proof lid and custom printing area.",
+    "images": [
+      "https://images.unsplash.com/photo-1517256673644-36ad11246d21?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "Stainless Steel",
+      "capacity": "16 oz",
+      "colors": ["Silver", "Black", "White", "Blue"],
+      "features": "Double-wall insulation, Leak-proof lid"
+    }
+  },
+  {
+    "Id": 10,
+    "name": "Magnetic Car Signs",
+    "category": "Signage",
+    "basePrice": 49.99,
+    "description": "Flexible magnetic signs for vehicles, removable and weather-resistant with full-color printing.",
+    "images": [
+      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1592853625597-7d17be820d0c?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "Magnetic Vinyl",
+      "sizes": ["12x18", "18x24", "24x36"],
+      "thickness": "30 mil magnetic",
+      "printing": "Full color digital print"
+    }
+  },
+  {
+    "Id": 11,
+    "name": "Custom Gift Box",
+    "category": "Boxes",
+    "basePrice": 19.99,
+    "description": "Elegant gift box with custom printing, perfect for special occasions and product packaging.",
+    "images": [
+      "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "Premium Cardstock",
+      "sizes": ["Small (4x4x2)", "Medium (6x6x3)", "Large (8x8x4)"],
+      "colors": ["White", "Black", "Kraft Brown"],
+      "finish": "Matte, Glossy, Embossed"
+    }
+  },
+  {
+    "Id": 12,
+    "name": "Round Wooden Coasters",
+    "category": "MDF Cut-outs",
+    "basePrice": 16.99,
+    "description": "Set of 4 round wooden coasters with custom engraving, perfect for cafes and home use.",
+    "images": [
+      "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=500&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=500&h=500&fit=crop&crop=center"
+    ],
+    "customizable": true,
+    "specifications": {
+      "material": "Birch Wood",
+      "size": "4\" diameter",
+      "thickness": "3mm",
+      "finish": "Laser engraved, Natural finish"
+    }
+  }
+]
