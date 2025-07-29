@@ -1,8 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Layout from "@/components/organisms/Layout";
-import ProductCatalog from "@/components/pages/ProductCatalog";
-import ProductDetail from "@/components/pages/ProductDetail";
 import DesignStudio from "@/components/pages/DesignStudio";
 import MyOrders from "@/components/pages/MyOrders";
 
@@ -12,9 +10,7 @@ function App() {
       <div className="min-h-screen bg-background">
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<ProductCatalog />} />
-            <Route path="/products" element={<ProductCatalog />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            <Route index element={<DesignStudio />} />
             <Route path="/design-studio" element={<DesignStudio />} />
             <Route path="/my-orders" element={<MyOrders />} />
           </Route>

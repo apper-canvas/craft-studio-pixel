@@ -12,8 +12,7 @@ const Header = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState([]);
 
-  const navigationItems = [
-    { path: "/products", label: "Products", icon: "Package" },
+const navigationItems = [
     { path: "/design-studio", label: "Design Studio", icon: "Palette" },
     { path: "/my-orders", label: "My Orders", icon: "ShoppingBag" }
   ];

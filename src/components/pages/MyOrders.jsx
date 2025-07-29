@@ -1,12 +1,56 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Button from "@/components/atoms/Button";
 import Empty from "@/components/ui/Empty";
 import ApperIcon from "@/components/ApperIcon";
+import { orderService } from "@/services/api/orderService";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
 
 const MyOrders = () => {
-  const handleBrowseProducts = () => {
-    // This will be handled by the Empty component's onAction
+  const navigate = useNavigate();
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
+  const loadOrders = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const ordersData = await orderService.getAll();
+      setOrders(ordersData);
+    } catch (err) {
+      setError("Failed to load orders");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const handleStartDesigning = () => {
+    navigate("/design-studio");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loading message="Loading your orders..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Error message={error} onRetry={loadOrders} />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -33,7 +77,7 @@ const MyOrders = () => {
             
             {/* Description */}
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Track your orders, view order history, and manage your custom product purchases all in one place.
+              Track your custom design orders, view order history, and manage your creative purchases all in one place.
             </p>
           </motion.div>
         </div>
@@ -54,10 +98,10 @@ const MyOrders = () => {
                   <ApperIcon name="Package" className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-display font-bold text-xl text-gray-900 mb-3">
-                  Order Tracking
+                  Design Tracking
                 </h3>
                 <p className="text-gray-600">
-                  Real-time updates on your order status from design approval to doorstep delivery.
+                  Real-time updates on your custom design orders from approval to delivery.
                 </p>
               </div>
 
@@ -66,34 +110,80 @@ const MyOrders = () => {
                   <ApperIcon name="History" className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-display font-bold text-xl text-gray-900 mb-3">
-                  Order History
+                  Design History
                 </h3>
                 <p className="text-gray-600">
-                  View all your previous orders, reorder favorites, and download invoices.
+                  View all your previous designs, reorder favorites, and download files.
                 </p>
               </div>
 
               <div className="bg-surface rounded-2xl p-8 shadow-card text-center">
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <ApperIcon name="RotateCcw" className="w-8 h-8 text-white" />
+                  <ApperIcon name="Edit" className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="font-display font-bold text-xl text-gray-900 mb-3">
-                  Easy Returns
+                  Design Revisions
                 </h3>
                 <p className="text-gray-600">
-                  Simple return process with prepaid labels and full refund guarantee.
+                  Request modifications to your designs before final production.
                 </p>
               </div>
             </div>
 
-            {/* Empty State */}
-            <Empty
-              title="No orders yet"
-              message="Start creating amazing custom products! Browse our catalog and place your first order to see it tracked here."
-              actionText="Browse Products"
-              onAction={handleBrowseProducts}
-              icon="ShoppingBag"
-            />
+            {/* Orders List or Empty State */}
+            {orders.length === 0 ? (
+              <Empty
+                title="No design orders yet"
+                message="Start creating amazing custom designs! Use our Design Studio to create your first design and place an order to see it tracked here."
+                actionText="Start Designing"
+                onAction={handleStartDesigning}
+                icon="Palette"
+              />
+            ) : (
+              <div className="space-y-6">
+                {orders.map((order) => (
+                  <div key={order.Id} className="bg-surface rounded-2xl p-6 shadow-card border border-gray-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h3 className="font-display font-semibold text-lg text-gray-900">
+                          Order #{order.Id}
+                        </h3>
+                        <p className="text-gray-600">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
+                          order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                          order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </span>
+                        <p className="text-lg font-semibold text-gray-900 mt-1">
+                          ${order.price}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-gray-600">{order.productType}</p>
+                        <p className="text-sm text-gray-500">Quantity: {order.quantity}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          View Details
+                        </Button>
+                        <Button variant="ghost" size="sm" icon="Download">
+                          Download
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </motion.div>
         </div>
       </section>
@@ -108,31 +198,33 @@ const MyOrders = () => {
             className="text-center"
           >
             <h2 className="font-display font-bold text-3xl text-gray-900 mb-8">
-              Ready to Get Started?
+              Ready to Create Something New?
             </h2>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
               <Button
                 variant="primary"
                 size="lg"
-                icon="Package"
+                icon="Palette"
                 className="flex-1"
+                onClick={handleStartDesigning}
               >
-                Browse Products
+                Design Studio
               </Button>
               
               <Button
                 variant="outline"
                 size="lg"
-                icon="Palette"
+                icon="History"
                 className="flex-1"
+                onClick={loadOrders}
               >
-                Design Studio
+                Refresh Orders
               </Button>
             </div>
             
             <p className="text-gray-600 mt-6">
-              Need help? Contact our support team for assistance with orders and customizations.
+              Need help with your designs? Contact our support team for assistance with orders and customizations.
             </p>
           </motion.div>
         </div>

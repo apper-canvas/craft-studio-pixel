@@ -1,22 +1,26 @@
-import { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import Button from "@/components/atoms/Button";
+import { designElementsService } from "@/services/api/designElementsService";
+import { orderService } from "@/services/api/orderService";
 import ApperIcon from "@/components/ApperIcon";
-import { productService } from "@/services/api/productService";
+import Button from "@/components/atoms/Button";
 
 const DesignStudio = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
-// Image editing state
+  
+  // Image editing state
   const [aspectRatioLocked, setAspectRatioLocked] = useState(true);
+  
   // Product and design state
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [designElements, setDesignElements] = useState([]);
+  const [canvasElements, setCanvasElements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('shapes');
   const [selectedElement, setSelectedElement] = useState(null);
   const [activeTool, setActiveTool] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -42,25 +46,17 @@ const DesignStudio = () => {
     '#FFC0CB', '#A52A2A', '#808080', '#000080', '#008000'
   ];
 
-  useEffect(() => {
-    loadProduct();
-  }, []);
+useEffect(() => {
+    loadDesignElements();
+  }, [selectedCategory]);
 
-const loadProduct = async () => {
+const loadDesignElements = async () => {
     try {
-      const productId = location.state?.productId;
-      const selectedImageIndex = location.state?.selectedImage || 0;
-      
-      if (!productId) {
-        toast.error("No product selected for design");
-        navigate("/products");
-        return;
-      }
-
-      const productData = await productService.getById(productId);
-      setProduct({ ...productData, selectedImageIndex });
+      setLoading(true);
+      const elements = await designElementsService.getByCategory(selectedCategory);
+      setDesignElements(elements);
     } catch (error) {
-      toast.error("Failed to load product");
+      toast.error("Failed to load design elements");
       console.error(error);
     } finally {
       setLoading(false);
@@ -83,8 +79,7 @@ const loadProduct = async () => {
       italic: isItalic,
       underline: isUnderline
     };
-
-    setDesignElements([...designElements, newTextElement]);
+setCanvasElements([...canvasElements, newTextElement]);
     setSelectedElement(newTextElement);
     setActiveTool(null);
     toast.success("Text element added");
@@ -104,8 +99,7 @@ const loadProduct = async () => {
           width: 200,
           height: 200
         };
-
-        setDesignElements([...designElements, newImageElement]);
+setCanvasElements([...canvasElements, newImageElement]);
         setSelectedElement(newImageElement);
         setActiveTool(null);
         toast.success("Image uploaded successfully");
@@ -139,7 +133,7 @@ const handleElementDoubleClick = (element, event) => {
 
 const handleTextSave = () => {
     if (editingText) {
-      const currentElement = designElements.find(el => el.id === editingText);
+      const currentElement = canvasElements.find(el => el.id === editingText);
       let finalContent;
       
       // If user has entered text, use it
@@ -154,9 +148,8 @@ const handleTextSave = () => {
       else {
         finalContent = "Double click to edit";
       }
-      
-      setDesignElements(elements => 
-        elements.map(el => 
+setCanvasElements(elements => 
+        elements.map(el =>
           el.id === editingText 
             ? { ...el, content: finalContent }
             : el
@@ -199,8 +192,7 @@ const handleMouseDown = (element, event) => {
       const elementHeight = element.height || (element.type === 'text' ? 30 : 200);
       const constrainedX = Math.max(0, Math.min(newX, 600 - elementWidth));
       const constrainedY = Math.max(0, Math.min(newY, 600 - elementHeight));
-
-      setDesignElements(elements =>
+setCanvasElements(elements =>
         elements.map(el =>
           el.id === element.id
             ? { ...el, x: constrainedX, y: constrainedY }
@@ -233,8 +225,7 @@ const handleMouseDown = (element, event) => {
   const applyTextStyle = (property, value) => {
     if (selectedElement && selectedElement.type === 'text') {
       const updatedElement = { ...selectedElement, [property]: value };
-      
-      setDesignElements(elements =>
+setCanvasElements(elements =>
         elements.map(el =>
           el.id === selectedElement.id ? updatedElement : el
         )
@@ -279,8 +270,7 @@ const handleMouseDown = (element, event) => {
       if (updatedElement.y + updatedElement.height > 600) {
         updatedElement.y = 600 - updatedElement.height;
       }
-      
-      setDesignElements(elements =>
+setCanvasElements(elements =>
         elements.map(el =>
           el.id === selectedElement.id ? updatedElement : el
         )
@@ -290,50 +280,104 @@ const handleMouseDown = (element, event) => {
     }
   };
 
-  const deleteElement = (elementId) => {
-    setDesignElements(elements => elements.filter(el => el.id !== elementId));
+const deleteElement = (elementId) => {
+    setCanvasElements(elements => elements.filter(el => el.id !== elementId));
     if (selectedElement && selectedElement.id === elementId) {
       setSelectedElement(null);
     }
     toast.success("Element deleted");
   };
 
-  const saveDesign = () => {
+const saveDesign = () => {
+    const designData = {
+      elements: canvasElements,
+      canvasSize: { width: 800, height: 600 },
+      name: `Design ${new Date().toLocaleDateString()}`,
+      savedAt: new Date().toISOString()
+    };
+    // In a real app, this would save to a backend
+    localStorage.setItem('saved-design', JSON.stringify(designData));
     toast.success("Design saved successfully!");
   };
 
   const exportDesign = () => {
-    toast.success("Design exported successfully!");
+    // Create a simple export by generating an image preview
+    const canvas = canvasRef.current;
+    if (canvas) {
+      // In a real app, this would generate and download the design
+      toast.success("Design exported successfully!");
+    }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading design studio...</p>
-        </div>
-      </div>
-    );
-  }
+  const placeOrder = async () => {
+    try {
+      if (canvasElements.length === 0) {
+        toast.error("Please add some elements to your design before placing an order");
+        return;
+      }
 
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <ApperIcon name="AlertCircle" className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Product Not Found</h2>
-          <p className="text-gray-600 mb-4">The selected product could not be loaded.</p>
-          <Button onClick={() => navigate("/products")}>
-            Return to Products
-          </Button>
-        </div>
-      </div>
-    );
-  }
+      const orderData = {
+        design: {
+          elements: canvasElements,
+          canvasSize: { width: 800, height: 600 }
+        },
+        productType: "Custom Design",
+        quantity: 1,
+        price: 29.99,
+        customerNotes: "Custom design created in Design Studio"
+      };
+
+      await orderService.create(orderData);
+      toast.success("Order placed successfully! Check My Orders for updates.");
+      navigate("/my-orders");
+    } catch (error) {
+      toast.error("Failed to place order");
+      console.error(error);
+    }
+  };
+
+const categories = [
+    { id: 'shapes', name: 'Shapes', icon: 'Square' },
+    { id: 'text', name: 'Text', icon: 'Type' },
+    { id: 'images', name: 'Images', icon: 'Image' },
+    { id: 'icons', name: 'Icons', icon: 'Star' }
+  ];
+
+  const addElementToCanvas = (element) => {
+    const newElement = {
+      id: generateId(),
+      type: element.type,
+      x: Math.random() * 300 + 50,
+      y: Math.random() * 200 + 50,
+      ...element.defaultProps,
+      selected: false
+    };
+    
+    if (element.type === 'text') {
+      newElement.content = element.defaultProps.content;
+      newElement.fontSize = element.defaultProps.fontSize;
+      newElement.fontFamily = element.defaultProps.fontFamily;
+      newElement.color = element.defaultProps.color;
+      newElement.fontWeight = element.defaultProps.fontWeight;
+    } else if (element.type === 'shape') {
+      newElement.fill = element.defaultProps.fill;
+      newElement.stroke = element.defaultProps.stroke;
+      newElement.strokeWidth = element.defaultProps.strokeWidth;
+      newElement.width = element.defaultProps.width;
+      newElement.height = element.defaultProps.height;
+      newElement.shapeType = element.name.toLowerCase();
+    } else if (element.type === 'icon') {
+      newElement.iconName = element.defaultProps.icon;
+      newElement.size = element.defaultProps.size;
+      newElement.color = element.defaultProps.color;
+    }
+
+    setCanvasElements(prev => [...prev, newElement]);
+    toast.success(`${element.name} added to canvas`);
+  };
 
   return (
-    <div className="min-h-screen bg-background">
+<div className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-surface border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -342,7 +386,7 @@ const handleMouseDown = (element, event) => {
               variant="ghost"
               size="sm"
               icon="ArrowLeft"
-              onClick={() => navigate(-1)}
+              onClick={() => navigate("/")}
             >
               Back
             </Button>
@@ -351,7 +395,7 @@ const handleMouseDown = (element, event) => {
                 Design Studio
               </h1>
               <p className="text-sm text-gray-600">
-                Designing: {product.name}
+                Create your custom design
               </p>
             </div>
           </div>
@@ -361,13 +405,75 @@ const handleMouseDown = (element, event) => {
               <ApperIcon name="Save" size={16} />
               Save
             </Button>
-            <Button variant="primary" size="sm" onClick={exportDesign}>
+            <Button variant="outline" size="sm" onClick={exportDesign}>
               <ApperIcon name="Download" size={16} />
               Export
+            </Button>
+            <Button variant="primary" size="sm" onClick={placeOrder}>
+              <ApperIcon name="ShoppingCart" size={16} />
+              Place Order
             </Button>
           </div>
         </div>
       </div>
+
+      <div className="flex h-[calc(100vh-80px)]">
+        {/* Sidebar - Design Elements */}
+        <div className="w-80 bg-surface border-r border-gray-200 flex flex-col">
+          {/* Category Tabs */}
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="font-display font-semibold text-lg text-gray-900 mb-4">
+              Design Elements
+            </h2>
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedCategory === category.id
+                      ? "bg-primary-100 text-primary-700"
+                      : "text-gray-600 hover:bg-gray-100"
+                  }`}
+                >
+                  <ApperIcon name={category.icon} size={16} />
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Elements List */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {loading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse" />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {designElements.map((element) => (
+                  <div
+                    key={element.Id}
+                    className="p-3 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors cursor-pointer"
+                    onClick={() => addElementToCanvas(element)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex items-center justify-center">
+                        <ApperIcon name={element.icon} size={20} className="text-primary-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900">{element.name}</h3>
+                        <p className="text-sm text-gray-500">{element.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
 
       <div className="flex h-[calc(100vh-73px)]">
         {/* Left Toolbar */}
@@ -571,9 +677,9 @@ const handleMouseDown = (element, event) => {
 
           {/* Layers Panel */}
           <div className="flex-1 p-4">
-            <h3 className="font-semibold text-gray-900 mb-3">Layers</h3>
+<h3 className="font-semibold text-gray-900 mb-3">Layers</h3>
             <div className="space-y-2">
-              {designElements.map((element, index) => (
+              {canvasElements.map((element, index) => (
                 <div
                   key={element.id}
                   onClick={() => setSelectedElement(element)}
@@ -612,9 +718,9 @@ const handleMouseDown = (element, event) => {
                     </Button>
                   </div>
                 </div>
-              ))}
+))}
               
-              {designElements.length === 0 && (
+              {canvasElements.length === 0 && (
                 <div className="text-center py-8 text-gray-500">
                   <ApperIcon name="Layers" size={32} className="mx-auto mb-2 opacity-50" />
                   <p className="text-sm">No design elements yet</p>
@@ -640,15 +746,19 @@ const handleMouseDown = (element, event) => {
               }}
             >
 {/* Product Background */}
-              <img
-                src={product.images[product.selectedImageIndex] || product.images[0]}
-                alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover"
-                draggable={false}
-              />
+<div className="absolute inset-0 bg-white rounded-lg">
+                {/* Canvas Grid Background */}
+<div 
+                  className="absolute inset-0 opacity-10"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3csvg width='20' height='20' xmlns='http://www.w3.org/2000/svg'%3e%3cdefs%3e%3cpattern id='grid' width='20' height='20' patternUnits='userSpaceOnUse'%3e%3cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='%23e5e7eb' stroke-width='1'/%3e%3c/pattern%3e%3c/defs%3e%3crect width='100%25' height='100%25' fill='url(%23grid)' /%3e%3c/svg%3e")`,
+                    backgroundSize: '20px 20px'
+                  }}
+                />
+              </div>
 
-              {/* Design Elements */}
-              {designElements.map((element) => (
+{/* Design Elements */}
+              {canvasElements.map((element) => (
                 <div key={element.id}>
                   {element.type === 'text' ? (
                     <div
@@ -719,8 +829,8 @@ const handleMouseDown = (element, event) => {
                 </div>
               ))}
 
-              {/* Canvas Instructions */}
-              {designElements.length === 0 && (
+{/* Canvas Instructions */}
+              {canvasElements.length === 0 && (
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   <div className="text-center text-gray-400">
                     <ApperIcon name="MousePointer" size={48} className="mx-auto mb-4 opacity-50" />

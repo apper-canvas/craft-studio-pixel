@@ -1,0 +1,152 @@
+[
+  {
+    "Id": 1,
+    "name": "Rectangle",
+    "category": "shapes",
+    "type": "shape",
+    "defaultProps": {
+      "width": 200,
+      "height": 100,
+      "fill": "#3B82F6",
+      "stroke": "#1D4ED8",
+      "strokeWidth": 2,
+      "borderRadius": 8
+    },
+    "icon": "Square",
+    "description": "Basic rectangle shape"
+  },
+  {
+    "Id": 2,
+    "name": "Circle",
+    "category": "shapes",
+    "type": "shape",
+    "defaultProps": {
+      "width": 150,
+      "height": 150,
+      "fill": "#10B981",
+      "stroke": "#047857",
+      "strokeWidth": 2,
+      "borderRadius": "50%"
+    },
+    "icon": "Circle",
+    "description": "Perfect circle shape"
+  },
+  {
+    "Id": 3,
+    "name": "Triangle",
+    "category": "shapes",
+    "type": "shape",
+    "defaultProps": {
+      "width": 150,
+      "height": 130,
+      "fill": "#F59E0B",
+      "stroke": "#D97706",
+      "strokeWidth": 2
+    },
+    "icon": "Triangle",
+    "description": "Triangle shape"
+  },
+  {
+    "Id": 4,
+    "name": "Star",
+    "category": "shapes",
+    "type": "shape",
+    "defaultProps": {
+      "width": 140,
+      "height": 140,
+      "fill": "#EF4444",
+      "stroke": "#DC2626",
+      "strokeWidth": 2
+    },
+    "icon": "Star",
+    "description": "Star shape"
+  },
+  {
+    "Id": 5,
+    "name": "Heading Text",
+    "category": "text",
+    "type": "text",
+    "defaultProps": {
+      "content": "Your Heading Here",
+      "fontSize": 32,
+      "fontFamily": "Plus Jakarta Sans",
+      "color": "#111827",
+      "fontWeight": "bold",
+      "textAlign": "left"
+    },
+    "icon": "Type",
+    "description": "Large heading text"
+  },
+  {
+    "Id": 6,
+    "name": "Body Text",
+    "category": "text",
+    "type": "text",
+    "defaultProps": {
+      "content": "Add your text content here. Click to edit and customize.",
+      "fontSize": 16,
+      "fontFamily": "Inter",
+      "color": "#374151",
+      "fontWeight": "normal",
+      "textAlign": "left"
+    },
+    "icon": "AlignLeft",
+    "description": "Regular body text"
+  },
+  {
+    "Id": 7,
+    "name": "Logo Placeholder",
+    "category": "images",
+    "type": "image",
+    "defaultProps": {
+      "src": "data:image/svg+xml,%3Csvg width='200' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='200' height='100' fill='%23E5E7EB'/%3E%3Ctext x='100' y='55' text-anchor='middle' fill='%236B7280' font-family='Arial, sans-serif' font-size='14'%3ELogo%3C/text%3E%3C/svg%3E",
+      "width": 200,
+      "height": 100,
+      "borderRadius": 8
+    },
+    "icon": "Image",
+    "description": "Placeholder for logo images"
+  },
+  {
+    "Id": 8,
+    "name": "Photo Frame",
+    "category": "images",
+    "type": "image",
+    "defaultProps": {
+      "src": "data:image/svg+xml,%3Csvg width='300' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='300' height='200' fill='%23F3F4F6'/%3E%3Ctext x='150' y='105' text-anchor='middle' fill='%236B7280' font-family='Arial, sans-serif' font-size='16'%3EPhoto%3C/text%3E%3C/svg%3E",
+      "width": 300,
+      "height": 200,
+      "borderRadius": 12
+    },
+    "icon": "ImageIcon",
+    "description": "Frame for photos and images"
+  },
+  {
+    "Id": 9,
+    "name": "Arrow",
+    "category": "icons",
+    "type": "icon",
+    "defaultProps": {
+      "icon": "ArrowRight",
+      "size": 24,
+      "color": "#6B7280",
+      "strokeWidth": 2
+    },
+    "icon": "ArrowRight",
+    "description": "Directional arrow"
+  },
+  {
+    "Id": 10,
+    "name": "Heart",
+    "category": "icons",
+    "type": "icon",
+    "defaultProps": {
+      "icon": "Heart",
+      "size": 24,
+      "color": "#EF4444",
+      "fill": true
+    },
+    "icon": "Heart",
+    "description": "Heart icon"
+  }
+]

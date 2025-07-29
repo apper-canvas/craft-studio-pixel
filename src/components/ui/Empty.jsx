@@ -3,10 +3,10 @@ import ApperIcon from "@/components/ApperIcon";
 
 const Empty = ({ 
   title = "No items found", 
-  message = "Try adjusting your search or browse our featured products.", 
-  actionText = "Browse All Products",
+  message = "Try creating something new in our Design Studio.", 
+  actionText = "Start Designing",
   onAction,
-  icon = "Package",
+  icon = "Palette",
   className 
 }) => {
   return (
@@ -44,10 +44,10 @@ const Empty = ({
         {/* Additional Suggestions */}
         <div className="mt-8 p-6 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
           <p className="text-sm text-gray-600 mb-3 font-medium">
-            Popular Categories:
+            Popular Design Elements:
           </p>
           <div className="flex flex-wrap justify-center gap-2">
-            {["T-Shirts", "Mugs", "Stickers", "Business Cards"].map((category) => (
+            {["Shapes", "Text", "Images", "Icons"].map((category) => (
               <span
                 key={category}
                 className="px-3 py-1 bg-white text-gray-700 rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-shadow cursor-pointer"
