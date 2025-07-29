@@ -417,68 +417,10 @@ const categories = [
         </div>
       </div>
 
-      <div className="flex h-[calc(100vh-80px)]">
-        {/* Sidebar - Design Elements */}
+<div className="flex h-[calc(100vh-80px)]">
+        {/* Left Sidebar - Combined Tools and Elements */}
         <div className="w-80 bg-surface border-r border-gray-200 flex flex-col">
-          {/* Category Tabs */}
-          <div className="p-4 border-b border-gray-200">
-            <h2 className="font-display font-semibold text-lg text-gray-900 mb-4">
-              Design Elements
-            </h2>
-            <div className="grid grid-cols-2 gap-2">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    selectedCategory === category.id
-                      ? "bg-primary-100 text-primary-700"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`}
-                >
-                  <ApperIcon name={category.icon} size={16} />
-                  {category.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Elements List */}
-          <div className="flex-1 overflow-y-auto p-4">
-            {loading ? (
-              <div className="space-y-3">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse" />
-                ))}
-              </div>
-            ) : (
-              <div className="space-y-2">
-                {designElements.map((element) => (
-                  <div
-                    key={element.Id}
-                    className="p-3 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors cursor-pointer"
-                    onClick={() => addElementToCanvas(element)}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex items-center justify-center">
-                        <ApperIcon name={element.icon} size={20} className="text-primary-600" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-medium text-gray-900">{element.name}</h3>
-                        <p className="text-sm text-gray-500">{element.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-      <div className="flex h-[calc(100vh-73px)]">
-        {/* Left Toolbar */}
-        <div className="w-80 bg-surface border-r border-gray-200 flex flex-col">
-          {/* Tools */}
+          {/* Tools Section */}
           <div className="p-4 border-b border-gray-200">
             <h3 className="font-semibold text-gray-900 mb-3">Tools</h3>
             <div className="grid grid-cols-2 gap-2">
@@ -520,7 +462,7 @@ const categories = [
           </div>
 
           {/* Text Properties */}
-{selectedElement && selectedElement.type === 'text' && (
+          {selectedElement && selectedElement.type === 'text' && (
             <div className="p-4 border-b border-gray-200">
               <h3 className="font-semibold text-gray-900 mb-3">Text Properties</h3>
               
@@ -605,7 +547,7 @@ const categories = [
                 </div>
               </div>
             </div>
-)}
+          )}
 
           {/* Image Properties */}
           {selectedElement && selectedElement.type === 'image' && (
@@ -675,58 +617,112 @@ const categories = [
             </div>
           )}
 
-          {/* Layers Panel */}
-          <div className="flex-1 p-4">
-<h3 className="font-semibold text-gray-900 mb-3">Layers</h3>
-            <div className="space-y-2">
-              {canvasElements.map((element, index) => (
-                <div
-                  key={element.id}
-                  onClick={() => setSelectedElement(element)}
-                  className={`p-3 rounded-lg border cursor-pointer transition-colors ${
-                    selectedElement?.id === element.id
-                      ? 'border-primary-500 bg-primary-50'
-                      : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+          {/* Design Elements Section */}
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="font-display font-semibold text-lg text-gray-900 mb-4">
+              Design Elements
+            </h2>
+            <div className="grid grid-cols-2 gap-2">
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    selectedCategory === category.id
+                      ? "bg-primary-100 text-primary-700"
+                      : "text-gray-600 hover:bg-gray-100"
                   }`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <ApperIcon 
-                        name={element.type === 'text' ? 'Type' : 'Image'} 
-                        size={16} 
-                        className="text-gray-600"
-                      />
-                      <span className="text-sm font-medium text-gray-900">
-                        {element.type === 'text' 
-                          ? element.content.length > 20 
-                            ? element.content.substring(0, 20) + '...'
-                            : element.content
-                          : `Image ${index + 1}`
-                        }
-                      </span>
+                  <ApperIcon name={category.icon} size={16} />
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Elements List */}
+          <div className="flex-1 overflow-y-auto p-4">
+            {loading ? (
+              <div className="space-y-3">
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse" />
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-2 mb-4">
+                {designElements.map((element) => (
+                  <div
+                    key={element.Id}
+                    className="p-3 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors cursor-pointer"
+                    onClick={() => addElementToCanvas(element)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary-100 to-secondary-100 rounded-lg flex items-center justify-center">
+                        <ApperIcon name={element.icon} size={20} className="text-primary-600" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-900">{element.name}</h3>
+                        <p className="text-sm text-gray-500">{element.description}</p>
+                      </div>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteElement(element.id);
-                      }}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <ApperIcon name="Trash2" size={14} />
-                    </Button>
                   </div>
-                </div>
-))}
-              
-              {canvasElements.length === 0 && (
-                <div className="text-center py-8 text-gray-500">
-                  <ApperIcon name="Layers" size={32} className="mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No design elements yet</p>
-                  <p className="text-xs">Use the tools above to add elements</p>
-                </div>
-              )}
+                ))}
+              </div>
+            )}
+
+            {/* Layers Panel */}
+            <div className="border-t border-gray-200 pt-4">
+              <h3 className="font-semibold text-gray-900 mb-3">Layers</h3>
+              <div className="space-y-2">
+                {canvasElements.map((element, index) => (
+                  <div
+                    key={element.id}
+                    onClick={() => setSelectedElement(element)}
+                    className={`p-3 rounded-lg border cursor-pointer transition-colors ${
+                      selectedElement?.id === element.id
+                        ? 'border-primary-500 bg-primary-50'
+                        : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <ApperIcon 
+                          name={element.type === 'text' ? 'Type' : 'Image'} 
+                          size={16} 
+                          className="text-gray-600"
+                        />
+                        <span className="text-sm font-medium text-gray-900">
+                          {element.type === 'text' 
+                            ? element.content.length > 20 
+                              ? element.content.substring(0, 20) + '...'
+                              : element.content
+                            : `Image ${index + 1}`
+                          }
+                        </span>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteElement(element.id);
+                        }}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <ApperIcon name="Trash2" size={14} />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                
+                {canvasElements.length === 0 && (
+                  <div className="text-center py-8 text-gray-500">
+                    <ApperIcon name="Layers" size={32} className="mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">No design elements yet</p>
+                    <p className="text-xs">Use the tools above to add elements</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
