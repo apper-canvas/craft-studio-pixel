@@ -486,10 +486,10 @@ const DesignStudio = () => {
               }}
             >
               {/* Product Background */}
-              <img
+<img
                 src={product.image}
                 alt={product.name}
-                className="absolute inset-0 w-full h-full object-cover opacity-20"
+                className="absolute inset-0 w-full h-full object-cover"
                 draggable={false}
               />
 
