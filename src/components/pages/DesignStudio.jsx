@@ -128,11 +128,11 @@ const loadProduct = async () => {
     }
   };
 
-  const handleElementDoubleClick = (element, event) => {
+const handleElementDoubleClick = (element, event) => {
     event.stopPropagation();
     if (element.type === 'text') {
       setEditingText(element.id);
-      setTextContent(element.content);
+      setTextContent(element.content || '');
     }
   };
 
@@ -548,17 +548,18 @@ const handleMouseDown = (element, event) => {
                       onDoubleClick={(e) => handleElementDoubleClick(element, e)}
                       onMouseDown={(e) => handleMouseDown(element, e)}
                     >
-                      {editingText === element.id ? (
+{editingText === element.id ? (
                         <input
-type="text"
-                          value={textContent || element.content}
+                          type="text"
+                          value={textContent}
                           onChange={(e) => setTextContent(e.target.value)}
                           onBlur={(e) => {
-                            // Only save if we're actually losing focus to something outside the text controls
-                            const relatedTarget = e.relatedTarget;
-                            if (!relatedTarget || !relatedTarget.closest('.text-controls')) {
-                              handleTextSave();
-                            }
+                            // Small delay to ensure any click events are processed first
+                            setTimeout(() => {
+                              if (editingText === element.id) {
+                                handleTextSave();
+                              }
+                            }, 100);
                           }}
                           onKeyPress={(e) => e.key === 'Enter' && handleTextSave()}
                           className="bg-transparent border-none outline-none"
