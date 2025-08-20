@@ -26,7 +26,7 @@ const DesignStudio = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 // Text editing state
-  const [editingText, setEditingText] = useState(null);
+const [editingText, setEditingText] = useState(null);
   const [textContent, setTextContent] = useState('');
   const [fontFamily, setFontFamily] = useState('Inter');
   const [fontSize, setFontSize] = useState(16);
@@ -127,28 +127,17 @@ const handleElementDoubleClick = (element, event) => {
     event.stopPropagation();
     if (element.type === 'text') {
       setEditingText(element.id);
-      setTextContent(element.content || '');
+      // Set the current content, or empty string if it's the placeholder
+      setTextContent(element.content === "Double click to edit" ? '' : (element.content || ''));
     }
   };
 
 const handleTextSave = () => {
     if (editingText) {
-      const currentElement = canvasElements.find(el => el.id === editingText);
-      let finalContent;
+      // Use the entered text, or placeholder if empty
+      const finalContent = textContent.trim() || "Double click to edit";
       
-      // If user has entered text, use it
-      if (textContent.trim()) {
-        finalContent = textContent.trim();
-      } 
-      // If element has existing meaningful content (not placeholder), preserve it
-      else if (currentElement?.content && currentElement.content !== "Double click to edit") {
-        finalContent = currentElement.content;
-      }
-      // Only use placeholder for truly empty elements
-      else {
-        finalContent = "Double click to edit";
-      }
-setCanvasElements(elements => 
+      setCanvasElements(elements => 
         elements.map(el =>
           el.id === editingText 
             ? { ...el, content: finalContent }
@@ -769,7 +758,7 @@ style={{
 {editingText === element.id ? (
 <input
                           type="text"
-                          value={textContent || (element.content !== "Double click to edit" ? element.content : "")}
+                          value={textContent}
                           onChange={(e) => setTextContent(e.target.value)}
                           onBlur={(e) => {
                             // Small delay to ensure any click events are processed first
